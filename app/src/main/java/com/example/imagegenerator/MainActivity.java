@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textView;
     String selectedWord = "";
+    //test
     Map<String, String> notesMap = new HashMap<>();
 
     @Override
