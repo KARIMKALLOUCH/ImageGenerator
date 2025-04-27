@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/dialog_background">
+
+
+
+    <!-- حقل إدخال الملاحظة -->
+    <EditText
+        android:id="@+id/noteText"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:hint="Edit your note here..."
+        android:textColorHint="#292626"
+        android:inputType="textMultiLine"
+        android:textColor="@color/black"
+        android:gravity="top|start"
+        android:background="@drawable/edittext_background"
+        android:padding="12dp"/>
+
+    <!-- أزرار الحوار -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <!-- زر الإلغاء -->
+        <Button
+            android:id="@+id/cancelButton"
+            style="@style/DialogButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="@color/gray"/>
+
+        <!-- زر الحفظ -->
+        <Button
+            android:id="@+id/saveButton"
+            style="@style/DialogButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Update"
+            android:textColor="@color/blue"/>
+    </LinearLayout>
+</LinearLayout>

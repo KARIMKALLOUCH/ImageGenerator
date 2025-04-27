@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
 
@@ -58,39 +59,19 @@
         app:layout_constraintTop_toBottomOf="@+id/generate_btn" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="119dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="28dp"
-        android:text="TextView"
-        android:textSize="35sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="270dp"
-        android:layout_height="261dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:src="@color/black" />
-
-    <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="8dp"
-        android:text="Hallo, das ist ein deutscher Text zum Üben!"
-        android:textSize="18sp"
         android:padding="16dp"
+        android:text="Letzte Woche hatte ich meinen ersten Arbeitstag in einer neuen Firma. Ich war ein bisschen nervös, aber auch sehr gespannt. Mein Chef hat mir zuerst das Büro gezeigt und mich den Kollegen vorgestellt. Alle waren freundlich und hilfsbereit. Ich habe gelernt, wie das Computersystem funktioniert und welche Aufgaben ich jeden Tag machen muss. Am Ende des Tages war ich müde,"
         android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.037" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

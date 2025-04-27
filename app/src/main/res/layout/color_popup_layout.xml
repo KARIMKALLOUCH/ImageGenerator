@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="1dp"
+    android:gravity="center_horizontal"
+    android:background="@drawable/popup_background">
+
+    <View
+        android:id="@+id/yellow"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:backgroundTint="#FDD835"
+        android:background="@drawable/color_circle" />
+
+    <View
+        android:id="@+id/blue"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:backgroundTint="#03A9F4"
+        android:background="@drawable/color_circle" />
+
+    <View
+        android:id="@+id/red"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:backgroundTint="#E91E63"
+        android:background="@drawable/color_circle" />
+
+    <View
+        android:id="@+id/orange"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:backgroundTint="#FF9800"
+        android:background="@drawable/color_circle" />
+
+</LinearLayout>

@@ -7,11 +7,9 @@ import androidx.core.content.ContextCompat;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -19,7 +17,6 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Pair;
 import android.view.ActionMode;
@@ -35,32 +32,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity {
-
+public class Test extends AppCompatActivity {
     TextView textView;
     NotesDatabaseHelper dbHelper;
-    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_test);
         dbHelper = new NotesDatabaseHelper(this);
-        button = findViewById(R.id.generate_btn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,Test.class);
-                startActivity(intent);
-            }
-        });
-
-        textView = findViewById(R.id.textView3);
+        textView = findViewById(R.id.textview4);
         textView.setTextIsSelectable(true);
         applySavedNotes();
 
@@ -71,7 +54,14 @@ public class MainActivity extends AppCompatActivity {
                 menu.add(0, 1, 0, "Note");
                 menu.add(0, 2, 1, "Color");
                 menu.add(0, 3, 2, "Copy");
+                int start = textView.getSelectionStart();
+                int end = textView.getSelectionEnd();
 
+                // نتحقق هل هذه الكلمة لديها لون
+                String existingColor = dbHelper.getColorForPosition(start, end);
+                if (existingColor != null) {
+                    menu.add(0, 4, 3, "Remove Color"); // نضيف الخيار فقط للكلمات الملوّنة
+                }
                 return true;
             }
 
@@ -110,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
                         clipboard.setPrimaryClip(ClipData.newPlainText("Copied Text", selectedText));
                         Toast.makeText(getApplicationContext(), "Copied", Toast.LENGTH_SHORT).show();
                         break;
+                    case 4:
+                        dbHelper.removeOnlyColorForPosition(start, end);
+                        applySavedNotes();
+                        Toast.makeText(getApplicationContext(), "Color removed", Toast.LENGTH_SHORT).show();
+                        break;
                 }
 
                 mode.finish();
@@ -121,58 +116,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-  //
-  private void applySavedNotes() {
-      SpannableString spannable = new SpannableString(textView.getText());
-      String fullText = textView.getText().toString();
-      // 🧼 تنظيف كل الـ spans القديمة
-      Object[] spans = spannable.getSpans(0, spannable.length(), Object.class);
-      for (Object span : spans) {
-          spannable.removeSpan(span);
-      }
+    //
+    private void applySavedNotes() {
+        SpannableString spannable = new SpannableString(textView.getText());
+        String fullText = textView.getText().toString();
+        // 🧼 تنظيف كل الـ spans القديمة
+        Object[] spans = spannable.getSpans(0, spannable.length(), Object.class);
+        for (Object span : spans) {
+            spannable.removeSpan(span);
+        }
 
-      // تطبيق الألوان
-      for (Map.Entry<Pair<Integer, Integer>, String> entry : dbHelper.getAllColorsWithPositions().entrySet()) {
-          Pair<Integer, Integer> position = entry.getKey();
-          String colorName = entry.getValue();
+        // تطبيق الألوان
+        for (Map.Entry<Pair<Integer, Integer>, String> entry : dbHelper.getAllColorsWithPositions().entrySet()) {
+            Pair<Integer, Integer> position = entry.getKey();
+            String colorName = entry.getValue();
 
-          int color = getColorFromName(colorName);
-          spannable.setSpan(new BackgroundColorSpan(color),
-                  position.first, position.second,
-                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-      }
+            int color = getColorFromName(colorName);
+            spannable.setSpan(new BackgroundColorSpan(color),
+                    position.first, position.second,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
 
-      // تطبيق الملاحظات (خط تحت + ClickableSpan)
-      for (Map.Entry<Pair<Integer, Integer>, String> entry : dbHelper.getAllNotesWithPositions().entrySet()) {
-          Pair<Integer, Integer> position = entry.getKey();
+        // تطبيق الملاحظات (خط تحت + ClickableSpan)
+        for (Map.Entry<Pair<Integer, Integer>, String> entry : dbHelper.getAllNotesWithPositions().entrySet()) {
+            Pair<Integer, Integer> position = entry.getKey();
 
-          spannable.setSpan(new UnderlineSpan(),
-                  position.first, position.second,
-                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new UnderlineSpan(),
+                    position.first, position.second,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-          ClickableSpan clickableSpan = new ClickableSpan() {
-              @Override
-              public void onClick(View widget) {
-                  // نجلب الملاحظة الحقيقية وقت الضغط
-                  String latestNote = dbHelper.getNoteForPosition(position.first, position.second);
-                  String word = fullText.substring(position.first, position.second);
-                  showNotePopup(word, latestNote);
-              }
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    // نجلب الملاحظة الحقيقية وقت الضغط
+                    String latestNote = dbHelper.getNoteForPosition(position.first, position.second);
+                    String word = fullText.substring(position.first, position.second);
+                    showNotePopup(word, latestNote);
+                }
 
-              @Override
-              public void updateDrawState(TextPaint ds) {
-                  ds.setUnderlineText(true);
-              }
-          };
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    ds.setUnderlineText(true);
+                }
+            };
 
-          spannable.setSpan(clickableSpan,
-                  position.first, position.second,
-                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-      }
+            spannable.setSpan(clickableSpan,
+                    position.first, position.second,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
 
-      textView.setText(spannable);
-      textView.setMovementMethod(LinkMovementMethod.getInstance());
-  }
+        textView.setText(spannable);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
 
     private int getColorFromName(String colorName) {
         switch (colorName) {
@@ -285,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // تغيير لون النص حسب حالة الزر (اختياري)
                 int colorRes = hasText ? R.color.blue : R.color.gray;
-                saveButton.setTextColor(ContextCompat.getColor(MainActivity.this, colorRes));
+                saveButton.setTextColor(ContextCompat.getColor(Test.this, colorRes));
             }
 
             @Override
@@ -352,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // تغيير لون النص حسب حالة الزر
                 int colorRes = hasChanges ? R.color.blue : R.color.gray;
-                saveButton.setTextColor(ContextCompat.getColor(MainActivity.this, colorRes));
+                saveButton.setTextColor(ContextCompat.getColor(Test.this, colorRes));
             }
 
             @Override

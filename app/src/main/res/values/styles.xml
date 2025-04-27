@@ -1,0 +1,11 @@
+<resources>
+    <!-- الأنماط الأخرى الموجودة لديك -->
+
+    <style name="DialogButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:textAllCaps">false</item> <!-- لإلغاء تحويل النص إلى أحرف كبيرة -->
+    </style>
+</resources>
